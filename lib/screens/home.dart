@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/domain/photo.dart';
 import 'package:flutter_app/data_access/photos.dart';
+import 'package:flutter_app/screens/photo_card.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -13,13 +14,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Photo _photo = Photo();
+  List<Photo> _photos = List<Photo>();
 
-  Future<void> nextPhoto() async {
-    var photos = await fetchPhotos();
-    setState(() {
-      _photo = photos[new Random().nextInt(100)];
-    });
+  @override
+  initState() {
+    super.initState();
+
+    fetchPhotos().then((photos) =>
+      setState(() {
+        _photos = photos.sublist(0, 20);
+      })
+    );
   }
 
   @override
@@ -28,27 +33,17 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              '${_photo.title}',
-              style: Theme.of(context).textTheme.headline4,
-              textAlign: TextAlign.center,
+      body: ListView.builder(
+        padding: const EdgeInsets.all(8),
+        itemCount: _photos.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+            child: PhotoCard(
+              photo: _photos[index],
             ),
-            Image.network(
-              '${_photo.thumbnailUrl}',
-              width: 200,
-              height: 200,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: nextPhoto,
-        tooltip: 'Next',
-        child: Icon(Icons.add),
+          );
+        }
       ),
     );
   }
