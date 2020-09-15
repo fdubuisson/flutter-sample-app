@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/domain/photo.dart';
-import 'package:flutter_app/data_access/photos.dart';
-import 'package:flutter_app/screens/photo_card.dart';
+import 'package:flutter_app/domain/pokemon.dart';
+import 'package:flutter_app/data_access/pokemons.dart';
+import 'package:flutter_app/screens/pokemon_card.dart';
 import 'package:flutter_app/screens/details.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,15 +14,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Photo> _photos = List<Photo>();
+  List<Pokemon> _pokemons = List<Pokemon>();
 
   @override
   initState() {
     super.initState();
 
-    fetchPhotos().then((photos) =>
+    listPokemons(0, 20).then((pokemons) => // TODO: paging
       setState(() {
-        _photos = photos.sublist(0, 20);
+        _pokemons = pokemons;
       })
     );
   }
@@ -35,21 +35,21 @@ class _HomePageState extends State<HomePage> {
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(8),
-        itemCount: _photos.length,
+        itemCount: _pokemons.length,
         itemBuilder: (BuildContext context, int index) {
           return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 2),
             child: GestureDetector(
               onTap: () {
                 setState(() {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => DetailsPage(photo: _photos[index])),
+                    MaterialPageRoute(builder: (context) => DetailsPage(pokemon: _pokemons[index])),
                   );
                 });
               },
-              child: PhotoCard(
-                photo: _photos[index],
+              child: PokemonCard(
+                pokemon: _pokemons[index],
               ),
             )
           );
