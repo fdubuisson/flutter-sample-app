@@ -1,19 +1,19 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/domain/photo.dart';
 import 'package:flutter_app/data_access/photos.dart';
 import 'package:flutter_app/screens/photo_card.dart';
+import 'package:flutter_app/screens/details.dart';
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class HomePage extends StatefulWidget {
+  HomePage({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   List<Photo> _photos = List<Photo>();
 
   @override
@@ -39,9 +39,19 @@ class _MyHomePageState extends State<MyHomePage> {
         itemBuilder: (BuildContext context, int index) {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-            child: PhotoCard(
-              photo: _photos[index],
-            ),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DetailsPage(photo: _photos[index])),
+                  );
+                });
+              },
+              child: PhotoCard(
+                photo: _photos[index],
+              ),
+            )
           );
         }
       ),

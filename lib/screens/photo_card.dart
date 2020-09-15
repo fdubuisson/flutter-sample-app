@@ -30,14 +30,16 @@ class _PhotoCardState extends State<PhotoCard> {
               SizedBox(
                 height: 8,
               ),
-              Expanded(
-                child: Image.network(
-                  '${widget.photo.thumbnailUrl}',
-                  fit: BoxFit.cover,
-                  width: 1200,
-                  //height: 1200,
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 152,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(widget.photo.url),
+                  ),
                 ),
-              ),
+              )
             ],
           ),
         ),
