@@ -31,10 +31,12 @@ class _PokemonCardState extends State<PokemonCard> {
               SizedBox(
                 height: 8,
               ),
+              Image.network(widget.pokemon.image, scale: 5),
+              /*
               Row(
-                children: widget.pokemon.sprites.map((e) => Image.network(e)).toList(),
+                children: widget.pokemon.sprites.sublist(0, 2).map((e) => Image.network(e)).toList(),
                 mainAxisAlignment: MainAxisAlignment.center,
-              ),
+              ),*/
             ],
           ),
         ),

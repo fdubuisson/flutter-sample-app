@@ -59,6 +59,10 @@ class PokemonDataSource extends PagedDataSource<int, Pokemon> {
       final hasFinished = newItems.length < _pageSize;
       final nextPageKey =  hasFinished ? null : (pageKey + newItems.length);
       notifyNewPage(newItems, nextPageKey);
-    }).catchError(notifyError);
+    }).catchError((e, stacktrace) {
+      print(e);
+      print(stacktrace);
+      notifyError(e);
+    });
   }
 }
