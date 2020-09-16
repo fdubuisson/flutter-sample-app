@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:flutter_app/domain/pokemon.dart';
 import 'package:flutter_app/data_access/pokemons.dart';
 import 'package:flutter_app/screens/pokemon_card.dart';
@@ -14,18 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Pokemon> _pokemons = List<Pokemon>();
-
-  @override
-  initState() {
-    super.initState();
-
-    listPokemons(0, 20).then((pokemons) => // TODO: paging
-      setState(() {
-        _pokemons = pokemons;
-      })
-    );
-  }
+  final PokemonDataSource _dataSource = PokemonDataSource();
 
   @override
   Widget build(BuildContext context) {
@@ -33,28 +23,42 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(8),
-        itemCount: _pokemons.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Padding(
+      body: PagedListView<int, Pokemon>(
+        dataSource: _dataSource,
+        builderDelegate: PagedChildBuilderDelegate<Pokemon>(
+          itemBuilder: (context, item, index) => Padding(
             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 2),
             child: GestureDetector(
               onTap: () {
                 setState(() {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => DetailsPage(pokemon: _pokemons[index])),
+                    MaterialPageRoute(builder: (context) => DetailsPage(pokemon: item)),
                   );
                 });
               },
               child: PokemonCard(
-                pokemon: _pokemons[index],
+                pokemon: item,
               ),
             )
-          );
-        }
-      ),
+          ),
+        ),
+      )
     );
+  }
+}
+
+class PokemonDataSource extends PagedDataSource<int, Pokemon> {
+  static const _pageSize = 20;
+
+  PokemonDataSource() : super(0);
+
+  @override
+  void fetchItems(int pageKey) {
+    listPokemons(pageKey, _pageSize).then((newItems) {
+      final hasFinished = newItems.length < _pageSize;
+      final nextPageKey =  hasFinished ? null : (pageKey + newItems.length);
+      notifyNewPage(newItems, nextPageKey);
+    }).catchError(notifyError);
   }
 }

@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_app/domain/pokemon.dart';
 
 Future<List<Pokemon>> listPokemons(int start, int count) async {
+  print("Loading pokemons [$start, $count]");
   final response = await http.get('https://pokeapi.co/api/v2/pokemon/?offset=$start&limit$count');
 
   if (response.statusCode == 200) {
