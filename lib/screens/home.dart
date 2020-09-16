@@ -19,11 +19,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.blueGrey[100]
       ),
-      body: PagedListView<int, Pokemon>(
+      child: PagedListView<int, Pokemon>(
         dataSource: _dataSource,
         builderDelegate: PagedChildBuilderDelegate<Pokemon>(
           itemBuilder: (context, item, index) => Padding(
@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
             )
           ),
         ),
-      )
+      ),
     );
   }
 }
