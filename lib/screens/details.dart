@@ -23,7 +23,7 @@ class _DetailsPageState extends State<DetailsPage> {
         children: <Widget>[
           Image.network(widget.pokemon.image),
           Container(
-            padding: const EdgeInsets.only(left: 20.0, top: 5.0, right: 20.0, bottom: 5.0),
+            padding: const EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0, bottom: 10.0),
             decoration: BoxDecoration(border: Border.all()),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -63,7 +63,7 @@ class _DetailsPageState extends State<DetailsPage> {
             height: 35,
           ),
           CarouselSlider(
-            options: CarouselOptions(height: 150, viewportFraction: 0.5),
+            options: CarouselOptions(height: 100, viewportFraction: 0.4),
             items: widget.pokemon.sprites.map((url) {
               return Builder(
                 builder: (BuildContext context) {
